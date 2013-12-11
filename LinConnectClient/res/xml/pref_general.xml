@@ -1,0 +1,69 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_toggle"
+        android:title="Enable LinConnect" >
+    </CheckBoxPreference>
+
+    <PreferenceCategory android:title="Setup" >
+        <Preference
+            android:key="pref_download"
+            android:summary="Tap here to share the download URL"
+            android:title="Step 1: Download server on desktop" />
+        <Preference
+            android:key="pref_enable"
+            android:summary="Tap here and select LinConnect"
+            android:title="Step 2: Enable notification service" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="cat_servers"
+        android:title="Step 3: Select Server" >
+        <EditTextPreference
+            android:defaultValue="0.0.0.0:9090"
+            android:icon="@drawable/ic_checkmark"
+            android:key="pref_ip"
+            android:order="-1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Custom IP address" />
+
+        <Preference
+            android:key="pref_loading"
+            android:layout="@layout/pref_progress"
+            android:order="999" >
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_refresh"
+            android:key="pref_refresh"
+            android:order="999"
+            android:title="Refresh server list" >
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Configuration" >
+        <Preference
+            android:key="pref_application"
+            android:summary="Tap here to choose which applications can send notifications to the desktop (optional)"
+            android:title="Enabled applications" />
+        <Preference
+            android:enabled="false"
+            android:summary="Additional options can be found in the server configuration file (conf.ini)"
+            android:title="Additional options" >
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Information" >
+        <Preference
+            android:key="pref_donate_btc"
+            android:summary="Tap here to donate via Bitcoin"
+            android:title="Donate via Bitcoin" />
+        <Preference
+            android:key="pref_donate_play"
+            android:summary="Tap here to donate by purchasing Donation Key"
+            android:title="Donate via Google Play" />
+        <Preference
+            android:key="pref_donate_btc"
+            android:summary="Tap here to donate via Bitcoin"
+            android:title="Donate via Bitcoin" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

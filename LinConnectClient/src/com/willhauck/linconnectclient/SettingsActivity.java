@@ -45,14 +45,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -68,8 +66,6 @@ import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends PreferenceActivity {
-	private static final boolean ALWAYS_SIMPLE_PREFS = false;
-
 	private String jmDnsServiceType = "_linconnect._tcp.local.";
 
 	private JmDNS mJmDNS;
@@ -118,10 +114,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 	@SuppressLint("SimpleDateFormat")
 	private void setupSimplePreferencesScreen() {
-		if (!isSimplePreferences(this)) {
-			return;
-		}
-
 		// Load preferences
 		sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(SettingsActivity.this);
@@ -257,6 +249,20 @@ public class SettingsActivity extends PreferenceActivity {
 												}
 											}).show();
 						}
+						return true;
+					}
+				});
+		
+		Preference prefGooglePlus = findPreference("pref_google_plus");
+		prefGooglePlus
+				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference arg0) {
+						// Open Google Plus page
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri
+								.parse("https://plus.google.com/114633032648182423928/posts"));
+						startActivity(intent);
 						return true;
 					}
 				});
@@ -457,21 +463,6 @@ public class SettingsActivity extends PreferenceActivity {
 
 		// Start scanning for servers
 		new ServerScanTask().execute();
-	}
-
-	@Override
-	public boolean onIsMultiPane() {
-		return isXLargeTablet(this) && !isSimplePreferences(this);
-	}
-
-	private static boolean isXLargeTablet(Context context) {
-		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-	}
-
-	private static boolean isSimplePreferences(Context context) {
-		return ALWAYS_SIMPLE_PREFS
-				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-				|| !isXLargeTablet(context);
 	}
 
 	private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {

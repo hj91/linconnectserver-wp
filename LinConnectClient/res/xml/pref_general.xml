@@ -53,9 +53,9 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="Information" >
         <Preference
-            android:key="pref_donate_btc"
-            android:summary="Tap here to donate via Bitcoin"
-            android:title="Donate via Bitcoin" />
+            android:key="pref_google_plus"
+            android:summary="Tap here to follow yycode on Google+"
+            android:title="Follow on Google+" />
         <Preference
             android:key="pref_donate_play"
             android:summary="Tap here to donate by purchasing Donation Key"

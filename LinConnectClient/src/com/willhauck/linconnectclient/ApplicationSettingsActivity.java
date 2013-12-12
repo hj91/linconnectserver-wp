@@ -34,15 +34,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -56,8 +53,6 @@ public class ApplicationSettingsActivity extends PreferenceActivity {
 	
 	ProgressDialog progressDialog;
 	PreferenceCategory applicationCategory;
-	
-	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -195,20 +190,5 @@ public class ApplicationSettingsActivity extends PreferenceActivity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 		}
-	}
-	
-	@Override
-	public boolean onIsMultiPane() {
-		return isXLargeTablet(this) && !isSimplePreferences(this);
-	}
-
-	private static boolean isXLargeTablet(Context context) {
-		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-	}
-
-	private static boolean isSimplePreferences(Context context) {
-		return ALWAYS_SIMPLE_PREFS
-				|| Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-				|| !isXLargeTablet(context);
 	}
 }

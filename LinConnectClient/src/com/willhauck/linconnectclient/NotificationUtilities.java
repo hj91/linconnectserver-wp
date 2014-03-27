@@ -74,19 +74,30 @@ public class NotificationUtilities {
 				ai = null;
 			}
 
-			// Create header and body of notification
-			String d1 = notificationData.get(0);
-			String d2 = notificationData.get(1);
+            String notificationBody = "";
+            String notificationHeader = "";
+            // Create header and body of notification
+            if (notificationData.size() > 0) {
+                notificationHeader = notificationData.get(0);
+                if (notificationData.size() > 1) {
+                    notificationBody = notificationData.get(1);
+                }
+            }
+            else {
+                return false;
+            }
+
+
 			for (int i = 2; i < notificationData.size(); i++) {
-				d2 += "\n" + notificationData.get(i);
+				notificationBody += "\n" + notificationData.get(i);
 			}
 
 			// Append application name to body
 			if (pm.getApplicationLabel(ai) != null) {
-				if (d2.isEmpty()) {
-					d2 = "via " + pm.getApplicationLabel(ai);
+				if (notificationBody.isEmpty()) {
+					notificationBody = "via " + pm.getApplicationLabel(ai);
 				} else {
-					d2 += " (via " + pm.getApplicationLabel(ai) + ")";
+					notificationBody += " (via " + pm.getApplicationLabel(ai) + ")";
 				}
 			}
 
@@ -115,8 +126,8 @@ public class NotificationUtilities {
 
 			HttpPost post = new HttpPost("http://" + ip + "/notif");
 			post.setEntity(entity);
-			post.addHeader("notifheader", d1);
-			post.addHeader("notifdescription", d2);
+			post.addHeader("notifheader", notificationHeader);
+			post.addHeader("notifdescription", notificationBody);
 
 			// Send HTTP request
 			HttpClient client = new DefaultHttpClient();

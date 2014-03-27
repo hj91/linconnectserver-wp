@@ -19,20 +19,6 @@
 
 package com.willhauck.linconnectclient;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,6 +33,22 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.util.Base64;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.InputStreamBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ApplicationSettingsActivity extends PreferenceActivity {
@@ -168,8 +170,13 @@ public class ApplicationSettingsActivity extends PreferenceActivity {
 
 			HttpPost post = new HttpPost("http://" + ip + "/notif");
 			post.setEntity(entity);
-			post.addHeader("notifheader", (String)notif[0]);
-			post.addHeader("notifdescription", (String)notif[1]);
+            try {
+                post.addHeader("notifheader", Base64.encodeToString(((String)notif[0]).getBytes("UTF-8"), Base64.URL_SAFE | Base64.NO_WRAP));
+                post.addHeader("notifdescription", Base64.encodeToString(((String)notif[1]).getBytes("UTF-8"), Base64.URL_SAFE|Base64.NO_WRAP));
+            } catch (UnsupportedEncodingException e) {
+                post.addHeader("notifheader", Base64.encodeToString(((String)notif[0]).getBytes(), Base64.URL_SAFE|Base64.NO_WRAP));
+                post.addHeader("notifdescription", Base64.encodeToString(((String)notif[1]).getBytes(), Base64.URL_SAFE|Base64.NO_WRAP));
+            }
 			
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response;

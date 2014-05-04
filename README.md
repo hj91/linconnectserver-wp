@@ -1,15 +1,7 @@
-linconnect-client
-=================
+This client is slightly modified version of linconnectclient which is originally available here - https://github.com/hauckwill/linconnect-client
 
-Mirror Android notifications on a Linux desktop.
+Todo
 
-LinConnect Server: https://github.com/hauckwill/linconnect-server/
-
-Client Download
----------------
-
-![alt text](https://developer.android.com/images/brand/en_app_rgb_wo_60.png "Google Play")
-
-A binary of the client may be downloaded from the Google Play Store.
-
-https://play.google.com/store/apps/details?id=com.willhauck.linconnectclient
+1. Read incoming SMS and mirror them on wordpress blog or email.
+2. Add xmpp support to enable more advanced features.
+3. Check for some more elaborate debugging and notifications on handset.

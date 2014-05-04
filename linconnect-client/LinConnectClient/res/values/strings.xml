@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">LinConnect</string>
-    <string name="action_settings">Settings</string>
-    <string name="description">LinConnect mirrors Android notifications on a Linux deskop.</string>
-
-</resources>

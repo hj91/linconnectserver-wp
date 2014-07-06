@@ -38,6 +38,16 @@ import pybonjour
 import shutil
 import base64
 
+if os.name != 'nt':
+    import fcntl 
+    import struct
+    
+    def get_interface_ip(ifname):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        return socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s',
+                                ifname[:15]))[20:24])
+
+
 app_name = 'linconnect-server'
 version = "2.20"
 
@@ -166,7 +176,7 @@ class Notification(object):
             except:
                 # Workaround for org.freedesktop.DBus.Error.ServiceUnknown
                 Notify.uninit()
-                Notify.init("com.willhauck.linconnect")
+                Notify.init("com.harshad.linconnect")
                 notif.show()
 
         return "true"
@@ -194,16 +204,43 @@ def initialize_bonjour():
     finally:
         sdRef.close()
 
-
 def get_local_ip():
     ips = []
-    for ip in subprocess.check_output("/sbin/ip address | grep -i 'inet ' | awk {'print $2'} | sed -e 's/\/[^\/]*$//'", shell=True).split("\n"):
-        if ip.__len__() > 0 and not ip.startswith("127."):
-            ips.append(ip + ":" + parser.get('connection', 'port'))
+    ip = socket.gethostbyname(socket.gethostname())
+    if ip.startswith("127.") and os.name != "nt":
+        interfaces = [
+            "eth0",
+            "eth1",
+            "eth2",
+            "wlan0",
+            "wlan1",
+            "wifi0",
+            "ath0",
+            "ath1",
+            "ppp0",
+            ]
+        for ifname in interfaces:
+            try:
+                ip = get_interface_ip(ifname)
+                ips.append (ip + ":" + parser.get('connection','port'))
+                break
+            except IOError:
+                pass
+    
     return ips
 
+# modified on 6th july 2014 _ harshad
+# no need of this complex code. no spaghetti preferred
+
+#def get_local_ip():
+#    ips = []
+#    for ip in subprocess.check_output("/sbin/ip address | grep -i 'inet ' | awk {'print $2'} | sed -e 's/\/[^\/]*$//'", shell=True).split("\n"):
+#        if ip.__len__() > 0 and not ip.startswith("127."):
+#            ips.append(ip + ":" + parser.get('connection', 'port'))
+#    return ips
+
 # Initialization
-if not Notify.init("com.willhauck.linconnect"):
+if not Notify.init("com.harshad.linconnect"):
     raise ImportError("Error initializing libnotify")
 
 # Start Bonjour if desired
